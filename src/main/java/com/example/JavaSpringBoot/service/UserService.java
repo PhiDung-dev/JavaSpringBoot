@@ -1,7 +1,7 @@
-package com.example.JavaSpringBoot.Service;
+package com.example.JavaSpringBoot.service;
 
-import com.example.JavaSpringBoot.Entity.User;
-import com.example.JavaSpringBoot.Repository.UserRepository;
+import com.example.JavaSpringBoot.entity.User;
+import com.example.JavaSpringBoot.repository.UserRepository;
 import com.example.JavaSpringBoot.dto.request.UserCreateRequest;
 import com.example.JavaSpringBoot.dto.request.UserUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,9 @@ public class UserService {
     UserRepository userRepository;
 
     public User createUser(UserCreateRequest request) {
+        if(userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("username already exists");
+        }
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
@@ -34,6 +37,9 @@ public class UserService {
     }
 
     public User updateUser(String id, UserUpdateRequest request) {
+        if(!userRepository.existsById(id)) {
+            throw new RuntimeException("user not found");
+        }
         User user = readUser(id);
         user.setPassword(request.getPassword());
         user.setFirstName(request.getFirstName());
@@ -43,6 +49,9 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
+        if(!userRepository.existsById(id)) {
+            throw new RuntimeException("user not found");
+        }
         userRepository.deleteById(id);
     }
 

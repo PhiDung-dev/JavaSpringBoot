@@ -1,7 +1,7 @@
-package com.example.JavaSpringBoot.Controller;
+package com.example.JavaSpringBoot.controller;
 
-import com.example.JavaSpringBoot.Entity.User;
-import com.example.JavaSpringBoot.Service.UserService;
+import com.example.JavaSpringBoot.entity.User;
+import com.example.JavaSpringBoot.service.UserService;
 import com.example.JavaSpringBoot.dto.request.UserCreateRequest;
 import com.example.JavaSpringBoot.dto.request.UserUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;

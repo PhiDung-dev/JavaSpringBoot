@@ -1,4 +1,4 @@
-package com.example.JavaSpringBoot.Entity;
+package com.example.JavaSpringBoot.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
