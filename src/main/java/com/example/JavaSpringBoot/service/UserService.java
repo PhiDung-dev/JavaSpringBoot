@@ -1,6 +1,8 @@
 package com.example.JavaSpringBoot.service;
 
 import com.example.JavaSpringBoot.entity.User;
+import com.example.JavaSpringBoot.exception.AppException;
+import com.example.JavaSpringBoot.exception.ErrorCode;
 import com.example.JavaSpringBoot.repository.UserRepository;
 import com.example.JavaSpringBoot.dto.request.UserCreateRequest;
 import com.example.JavaSpringBoot.dto.request.UserUpdateRequest;
@@ -17,7 +19,7 @@ public class UserService {
 
     public User createUser(UserCreateRequest request) {
         if(userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("user existed");
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
         User user = new User();
         user.setUsername(request.getUsername());
