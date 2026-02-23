@@ -1,5 +1,6 @@
 package com.example.JavaSpringBoot.controller;
 
+import com.example.JavaSpringBoot.dto.request.ApiResponse;
 import com.example.JavaSpringBoot.entity.User;
 import com.example.JavaSpringBoot.service.UserService;
 import com.example.JavaSpringBoot.dto.request.UserCreateRequest;
@@ -18,8 +19,10 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    public User createUser(@RequestBody @Valid UserCreateRequest request) {
-        return userService.createUser(request);
+    public ApiResponse<User> createUser(@RequestBody @Valid UserCreateRequest request) {
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.createUser(request));
+        return apiResponse;
     }
 
     @GetMapping
