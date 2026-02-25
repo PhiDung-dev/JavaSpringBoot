@@ -1,69 +1,22 @@
 package com.example.JavaSpringBoot.dto.request;
 
-import com.example.JavaSpringBoot.exception.ErrorCode;
 import jakarta.validation.constraints.Size;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-import java.util.Locale;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreateRequest {
 
     @Size(min = 6, message = "USERNAME_INVALID")
-    private String username;
+    String username;
     @Size(min = 6, message = "PASSWORD_INVALID")
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String dateOfBirth;
-
-    public UserCreateRequest() {
-    }
-
-    public UserCreateRequest(String username, String password, String firstName, String lastName, String dateOfBirth) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+    String password;
+    String firstName;
+    String lastName;
+    String dateOfBirth;
 
 }
