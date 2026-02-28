@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,32 +30,39 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserResponse> readUsers() {
-        return userService.readUsers();
+    public ApiResponse<List<UserResponse>> readUsers() {
+        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.readUsers());
+        return apiResponse;
     }
 
     @GetMapping("/detail")
-    public List<User> readDetailUser(){
-        return userService.readDetailUser();
+    public ApiResponse<List<User>> readDetailUser(){
+        ApiResponse<List<User>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.readDetailUsers());
+        return apiResponse;
     }
 
     @GetMapping("/{userId}")
-    public UserResponse readUser(@PathVariable("userId") String userId) {
-        return userService.readUser(userId);
+    public ApiResponse<UserResponse> readUser(@PathVariable("userId") String userId) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.readUser(userId));
+        return apiResponse;
     }
 
     @PutMapping("/{userId}")
-    public UserResponse updateUser(@PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
-        return userService.updateUser(userId, request);
+    public ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.updateUser(userId, request));
+        return apiResponse;
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable String userId){
+    public ApiResponse<Void> deleteUser(@PathVariable String userId){
         ApiResponse<Void> apiResponse = new ApiResponse<>();
-        apiResponse.setCode(1500);
-        apiResponse.setMessage("user has been deleted");
         userService.deleteUser(userId);
-        return ResponseEntity.accepted().body(apiResponse);
+        apiResponse.setMessage("user has been deleted");
+        return apiResponse;
     }
 
 }

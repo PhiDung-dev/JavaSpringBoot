@@ -1,6 +1,5 @@
 package com.example.JavaSpringBoot.service;
 
-import com.example.JavaSpringBoot.dto.request.ApiResponse;
 import com.example.JavaSpringBoot.dto.respose.UserResponse;
 import com.example.JavaSpringBoot.entity.User;
 import com.example.JavaSpringBoot.exception.AppException;
@@ -41,22 +40,19 @@ public class UserService {
     }
 
     public UserResponse updateUser(String id, UserUpdateRequest request) {
-        if(!userRepository.existsById(id)) {
-            throw new AppException(ErrorCode.USER_NOT_FOUND);
-        }
         User user = userRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
         userMapper.updateUser(user, request);
-        return userMapper.toUserResponse(user);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     public void deleteUser(String id) {
-        if(!userRepository.existsById(id)) {
+        if(userRepository.existsById(id)){
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
         userRepository.deleteById(id);
     }
 
-    public List<User> readDetailUser() {
+    public List<User> readDetailUsers() {
         return userRepository.findAll();
     }
 }
