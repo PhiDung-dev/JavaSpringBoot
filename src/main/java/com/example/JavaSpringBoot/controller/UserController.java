@@ -1,6 +1,6 @@
 package com.example.JavaSpringBoot.controller;
 
-import com.example.JavaSpringBoot.dto.request.ApiResponse;
+import com.example.JavaSpringBoot.dto.respose.ApiResponse;
 import com.example.JavaSpringBoot.dto.respose.UserResponse;
 import com.example.JavaSpringBoot.entity.User;
 import com.example.JavaSpringBoot.service.UserService;
@@ -24,44 +24,50 @@ public class UserController {
 
     @PostMapping
     public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest request) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.createUser(request));
+        ApiResponse<UserResponse> apiResponse = ApiResponse.<UserResponse>builder()
+                .result(userService.createUser(request))
+                .build();
         return apiResponse;
     }
 
     @GetMapping
     public ApiResponse<List<UserResponse>> readUsers() {
-        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.readUsers());
+        ApiResponse<List<UserResponse>> apiResponse = ApiResponse.<List<UserResponse>>builder()
+                .result(userService.readUsers())
+                .build();
         return apiResponse;
     }
 
     @GetMapping("/detail")
     public ApiResponse<List<User>> readDetailUser(){
-        ApiResponse<List<User>> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.readDetailUsers());
+        ApiResponse<List<User>> apiResponse = ApiResponse.<List<User>>builder()
+                .result(userService.readDetailUsers())
+                .build();
         return apiResponse;
     }
 
     @GetMapping("/{userId}")
     public ApiResponse<UserResponse> readUser(@PathVariable("userId") String userId) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.readUser(userId));
+        ApiResponse<UserResponse> apiResponse = ApiResponse.<UserResponse>builder()
+                .result(userService.readUser(userId))
+                .build();
         return apiResponse;
     }
 
     @PutMapping("/{userId}")
     public ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.updateUser(userId, request));
+        ApiResponse<UserResponse> apiResponse = ApiResponse.<UserResponse>builder()
+                .result(userService.updateUser(userId, request))
+                .build();
         return apiResponse;
     }
 
     @DeleteMapping("/{userId}")
     public ApiResponse<Void> deleteUser(@PathVariable String userId){
-        ApiResponse<Void> apiResponse = new ApiResponse<>();
         userService.deleteUser(userId);
-        apiResponse.setMessage("user has been deleted");
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .message("user has been deleted")
+                .build();
         return apiResponse;
     }
 

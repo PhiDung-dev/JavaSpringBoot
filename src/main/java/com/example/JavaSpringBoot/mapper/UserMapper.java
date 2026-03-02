@@ -1,6 +1,5 @@
 package com.example.JavaSpringBoot.mapper;
 
-import com.example.JavaSpringBoot.dto.request.ApiResponse;
 import com.example.JavaSpringBoot.dto.request.UserCreateRequest;
 import com.example.JavaSpringBoot.dto.request.UserUpdateRequest;
 import com.example.JavaSpringBoot.dto.respose.UserResponse;

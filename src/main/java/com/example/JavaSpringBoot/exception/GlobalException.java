@@ -1,6 +1,6 @@
 package com.example.JavaSpringBoot.exception;
 
-import com.example.JavaSpringBoot.dto.request.ApiResponse;
+import com.example.JavaSpringBoot.dto.respose.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalException {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ApiResponse> handleValidationException(MethodArgumentNotValidException exception) {
+    ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         String enumKey = exception.getFieldError().getDefaultMessage();
         ErrorCode errorCode;
         try {
@@ -19,25 +19,28 @@ public class GlobalException {
         catch(IllegalArgumentException e) {
             errorCode = ErrorCode.KEY_INVALID;
         }
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMessage());
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build();
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
     @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse> handlerAppException(AppException exception) {
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(exception.getErrorCode().getCode());
-        apiResponse.setMessage(exception.getErrorCode().getMessage());
+    ResponseEntity<ApiResponse<Void>> handlerAppException(AppException exception) {
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(exception.getErrorCode().getCode())
+                .message(exception.getErrorCode().getMessage())
+                .build();
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handlerException(RuntimeException exception) {
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(ErrorCode.OTHER_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.OTHER_EXCEPTION.getMessage());
+    ResponseEntity<ApiResponse<Void>> handlerException(Exception exception) {
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(ErrorCode.OTHER_EXCEPTION.getCode())
+                .message(ErrorCode.OTHER_EXCEPTION.getMessage())
+                .build();
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
