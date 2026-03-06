@@ -16,6 +16,7 @@ public enum ErrorCode {
     KEY_INVALID(1003, "key error code invalid"),
     USERNAME_INVALID(1004, "username must be at least 6 characters"),
     PASSWORD_INVALID(1005, "password must be at least 6 characters"),
+    AUTHENTICATED(1006, "authenticated"),
     OTHER_EXCEPTION(9999, "other exception"),
     ;
     int code;

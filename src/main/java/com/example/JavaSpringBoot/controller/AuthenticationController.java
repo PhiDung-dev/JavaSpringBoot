@@ -22,7 +22,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     ApiResponse<AuthenticationResponse> login (@RequestBody AuthenticationRequest request) {
         ApiResponse<AuthenticationResponse> apiResponse = ApiResponse.<AuthenticationResponse>builder()
-                .result(authenticationService.login(request))
+                .result(authenticationService.authenticate(request))
                 .build();
         return apiResponse;
     }
