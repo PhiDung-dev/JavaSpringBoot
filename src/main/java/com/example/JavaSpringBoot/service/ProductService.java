@@ -50,6 +50,9 @@ public class ProductService {
     public ProductResponse updateProduct(String id, ProductUpdateRequest request) {
         Product product = productRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         productMapper.updateProduct(product, request);
+        Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+        product.getImages().forEach(img->img.setProduct(product));
+        product.setCategory(category);
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
@@ -59,6 +62,5 @@ public class ProductService {
         }
         productRepository.deleteById(id);
     }
-
 
 }

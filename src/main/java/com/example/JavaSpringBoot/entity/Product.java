@@ -19,7 +19,8 @@ public class Product {
     String id;
     String productName;
     String description;
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductImage> images;
 
     @ManyToOne

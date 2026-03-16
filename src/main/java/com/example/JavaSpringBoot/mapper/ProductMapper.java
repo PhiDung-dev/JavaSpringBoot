@@ -23,6 +23,8 @@ public interface ProductMapper {
     @Mapping(target = "imgs", source = "images")
     ProductResponse toProductResponse(Product product);
     List<ProductResponse> toProductResponseList(List<Product> products);
+
+    @Mapping(target = "images", source = "imgs")
     void updateProduct(@MappingTarget Product product, ProductUpdateRequest request);
 
     default ProductImage map(String url) {
