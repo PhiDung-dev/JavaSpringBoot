@@ -17,4 +17,7 @@ public interface CategoryMapper {
     List<CategoryResponse> toCategoryResponseList(List<Category> categories);
     void updateCategory(@MappingTarget Category category, CategoryUpdateRequest request);
 
+    default String map(Category category) {
+        return category.getId();
+    }
 }

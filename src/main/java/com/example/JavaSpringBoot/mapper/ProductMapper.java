@@ -21,6 +21,7 @@ public interface ProductMapper {
     Product toProduct(ProductCreateRequest request);
 
     @Mapping(target = "imgs", source = "images")
+    @Mapping(target = "categoryId", source = "category")
     ProductResponse toProductResponse(Product product);
     List<ProductResponse> toProductResponseList(List<Product> products);
 

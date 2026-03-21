@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
+
     AuthenticationService authenticationService;
 
     @PostMapping("/login")
@@ -33,4 +34,5 @@ public class AuthenticationController {
                 .build();
         return apiResponse;
     }
+
 }

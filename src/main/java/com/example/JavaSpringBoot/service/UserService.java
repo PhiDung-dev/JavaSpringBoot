@@ -61,4 +61,5 @@ public class UserService {
     public List<User> readDetailUsers() {
         return userRepository.findAll();
     }
+
 }

@@ -24,7 +24,7 @@ public class CategoryService {
     CategoryMapper categoryMapper;
 
     public CategoryResponse createCategory(CategoryCreateRequest request) {
-        if(categoryRepository.existsById(request.getId())) {
+        if(categoryRepository.existsByCategoryName(request.getCategoryName())) {
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
         Category category = categoryMapper.toCategory(request);

@@ -1,9 +1,6 @@
 package com.example.JavaSpringBoot.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,12 +16,10 @@ import java.util.List;
 public class Category {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     String id;
     String categoryName;
     String img;
-    String detail;
-
-    @OneToMany(mappedBy = "category")
-    List<Product> products;
+    String description;
 
 }

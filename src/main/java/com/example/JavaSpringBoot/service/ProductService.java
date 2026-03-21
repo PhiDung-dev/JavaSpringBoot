@@ -29,13 +29,13 @@ public class ProductService {
     CategoryRepository categoryRepository;
 
     public ProductResponse createProduct(ProductCreateRequest request) {
-        if(productRepository.existsById(request.getId())) {
+        if(productRepository.existsByProductName(request.getProductName())) {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
         Product product = productMapper.toProduct(request);
+        product.getImages().forEach(img-> img.setProduct(product));
         Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         product.setCategory(category);
-        product.getImages().forEach(img-> img.setProduct(product));
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
@@ -50,8 +50,8 @@ public class ProductService {
     public ProductResponse updateProduct(String id, ProductUpdateRequest request) {
         Product product = productRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         productMapper.updateProduct(product, request);
-        Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         product.getImages().forEach(img->img.setProduct(product));
+        Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         product.setCategory(category);
         return productMapper.toProductResponse(productRepository.save(product));
     }

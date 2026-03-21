@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ErrorCode {
+
     USER_EXISTED(1001, "user existed"),
     USER_NOT_FOUND(1002, "user not found"),
     KEY_INVALID(1003, "key error code invalid"),

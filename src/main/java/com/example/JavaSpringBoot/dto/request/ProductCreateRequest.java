@@ -12,9 +12,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductCreateRequest {
 
-    String id;
     String productName;
     String description;
+    double price;
     List<String> imgs;
     String categoryId;
 

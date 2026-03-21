@@ -33,6 +33,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
+
     UserRepository userRepository;
     @NonFinal
     @Value("${jwt.secret-key}")
@@ -152,4 +153,5 @@ public class AuthenticationService {
                     .build();
 
     }
+
 }

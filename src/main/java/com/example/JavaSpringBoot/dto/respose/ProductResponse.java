@@ -15,7 +15,8 @@ public class ProductResponse {
     String id;
     String productName;
     String description;
+    double price;
     List<String> imgs;
-    CategoryResponse category;
+    String categoryId;
 
 }
