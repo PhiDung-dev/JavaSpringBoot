@@ -16,7 +16,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = CategoryMapper.class)
 public interface ProductMapper {
 
-    @Mapping(target = "images", source = "imgs")
+    @Mapping(target = "images", ignore = true)
     @Mapping(target = "category", ignore = true)
     Product toProduct(ProductCreateRequest request);
 
@@ -25,15 +25,9 @@ public interface ProductMapper {
     ProductResponse toProductResponse(Product product);
     List<ProductResponse> toProductResponseList(List<Product> products);
 
-    @Mapping(target = "images", source = "imgs")
+    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "category", ignore = true)
     void updateProduct(@MappingTarget Product product, ProductUpdateRequest request);
-
-    default ProductImage map(String url) {
-        ProductImage img = ProductImage.builder()
-                .url(url)
-                .build();
-        return img;
-    }
 
     default String map(ProductImage productImage) {
         return productImage.getUrl();

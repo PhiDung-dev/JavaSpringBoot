@@ -17,7 +17,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +32,14 @@ public class ProductService {
             throw new AppException(ErrorCode.PRODUCT_EXISTED);
         }
         Product product = productMapper.toProduct(request);
-        product.getImages().forEach(img-> img.setProduct(product));
+        List<ProductImage> images = request.getImgs().stream()
+                .map(url->{
+                    return ProductImage.builder()
+                            .url(url)
+                            .product(product)
+                            .build();
+                }).toList();
+        product.setImages(images);
         Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         product.setCategory(category);
         return productMapper.toProductResponse(productRepository.save(product));
@@ -50,14 +56,21 @@ public class ProductService {
     public ProductResponse updateProduct(String id, ProductUpdateRequest request) {
         Product product = productRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         productMapper.updateProduct(product, request);
-        product.getImages().forEach(img->img.setProduct(product));
+        product.getImages().clear();
+        request.getImgs().forEach((url)->{
+            ProductImage img = ProductImage.builder()
+                    .url(url)
+                    .product(product)
+                    .build();
+            product.getImages().add(img);
+        });
         Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         product.setCategory(category);
         return productMapper.toProductResponse(productRepository.save(product));
     }
 
     public void deleteProduct(String id) {
-        if(productRepository.existsById(id)) {
+        if(!productRepository.existsById(id)) {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
         productRepository.deleteById(id);
