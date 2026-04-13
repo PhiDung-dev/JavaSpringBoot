@@ -3,6 +3,8 @@ package com.example.JavaSpringBoot.dto.respose;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,5 +17,5 @@ public class UserResponse {
     String firstName;
     String lastName;
     String dateOfBirth;
-
+    Set<String> roles;
 }

@@ -4,6 +4,7 @@ import com.example.JavaSpringBoot.dto.request.AuthenticationRequest;
 import com.example.JavaSpringBoot.dto.request.IntrospectRequest;
 import com.example.JavaSpringBoot.dto.respose.AuthenticationResponse;
 import com.example.JavaSpringBoot.dto.respose.IntrospectResponse;
+import com.example.JavaSpringBoot.entity.User;
 import com.example.JavaSpringBoot.exception.AppException;
 import com.example.JavaSpringBoot.exception.ErrorCode;
 import com.example.JavaSpringBoot.repository.UserRepository;
@@ -18,7 +19,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 
 @Slf4j
@@ -38,15 +39,15 @@ public class AuthenticationService {
     @NonFinal
     @Value("${jwt.secret-key}")
     protected String secretKey;
+    PasswordEncoder passwordEncoder;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if(!authenticated) {
             throw new AppException(ErrorCode.AUTHENTICATED);
         }
-        var token = generateToken2(request.getUsername());
+        var token = generateToken2(user);
         AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
                 .authenticate(authenticated)
                 .token(token)
@@ -54,14 +55,14 @@ public class AuthenticationService {
         return authenticationResponse;
     }
 
-    private String generateToken1(String username) {
+    private String generateToken1(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
+                .subject(user.getUsername())
                 .issuer("service")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-                .claim("customClaim", "custom")
+                .claim("scope", builderScope(user.getRoles()))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
@@ -102,14 +103,14 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken2(String username){
+    private String generateToken2(User user){
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
+                .subject(user.getUsername())
                 .issuer("service")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-                .claim("customClaim", "custom")
+                .claim("scope", builderScope(user.getRoles()))
                 .build();
         SignedJWT signedJWT = new SignedJWT(jwsHeader, jwtClaimsSet);
         try {
@@ -152,6 +153,14 @@ public class AuthenticationService {
                     .valid(verified && expTime.after(new Date()))
                     .build();
 
+    }
+
+    private String builderScope(Set<String> roles) {
+        StringBuilder scope = new StringBuilder();
+        roles.forEach(s->{
+            scope.append(s).append(" ");
+        });
+        return scope.toString().trim();
     }
 
 }
