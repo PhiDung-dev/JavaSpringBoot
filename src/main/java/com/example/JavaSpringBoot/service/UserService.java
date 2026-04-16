@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,13 +44,13 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> readUsers() {
-        var authentication =  SecurityContextHolder.getContext().getAuthentication();
-        log.info("Username: "+ authentication.getName());
-        log.info("Roles: "+ authentication.getAuthorities());
+        log.info("in method read users");
         return userMapper.toUserResponseList(userRepository.findAll());
     }
 
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse readUser(String id) {
         return userMapper.toUserResponse(userRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND)));
     }
@@ -69,6 +71,13 @@ public class UserService {
 
     public List<User> readDetailUsers() {
         return userRepository.findAll();
+    }
+
+    public UserResponse getMyInfo() {
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.toUserResponse(user);
     }
 
 }

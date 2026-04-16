@@ -71,4 +71,11 @@ public class UserController {
         return apiResponse;
     }
 
+    @GetMapping("/myInfo")
+    public ApiResponse<UserResponse> readMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
+    }
+
 }
