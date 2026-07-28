@@ -27,6 +27,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 
 @Slf4j
@@ -110,7 +111,7 @@ public class AuthenticationService {
                 .issuer("service")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-//                .claim("scope", builderScope(user.getRoles()))
+                .claim("scope", builderScope(user))
                 .build();
         SignedJWT signedJWT = new SignedJWT(jwsHeader, jwtClaimsSet);
         try {
@@ -155,12 +156,17 @@ public class AuthenticationService {
 
     }
 
-    private String builderScope(Set<String> roles) {
-        StringBuilder scope = new StringBuilder();
-        roles.forEach(s->{
-            scope.append(s).append(" ");
+    private String builderScope(User user) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        user.getRoles().forEach(role -> {
+            stringJoiner.add("ROLE_"+role.getName());
+            if(!role.getPermissions().isEmpty()) {
+                role.getPermissions().forEach(permission -> {
+                    stringJoiner.add(permission.getName());
+                });
+            }
         });
-        return scope.toString().trim();
+        return stringJoiner.toString();
     }
 
 }
