@@ -1,9 +1,11 @@
 package com.example.JavaSpringBoot.dto.request;
 
+import com.example.JavaSpringBoot.validator.DateOfBirthConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -17,7 +19,8 @@ public class UserUpdateRequest {
     String password;
     String firstName;
     String lastName;
-    String dateOfBirth;
+    @DateOfBirthConstraint(min = 18, message = "DOB_INVALID")
+    LocalDate dateOfBirth;
     List<String> roles;
 
 }

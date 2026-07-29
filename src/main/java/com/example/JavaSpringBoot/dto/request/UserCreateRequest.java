@@ -1,8 +1,11 @@
 package com.example.JavaSpringBoot.dto.request;
 
+import com.example.JavaSpringBoot.validator.DateOfBirthConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +20,7 @@ public class UserCreateRequest {
     String password;
     String firstName;
     String lastName;
-    String dateOfBirth;
+    @DateOfBirthConstraint(min=18, message = "DOB_INVALID")
+    LocalDate dateOfBirth;
 
 }
