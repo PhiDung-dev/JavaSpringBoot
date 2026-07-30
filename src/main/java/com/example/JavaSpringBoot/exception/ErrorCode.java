@@ -15,11 +15,11 @@ import org.springframework.http.HttpStatusCode;
 public enum ErrorCode {
 
     KEY_INVALID(1001, "key error code invalid", HttpStatus.BAD_REQUEST),
-    USERNAME_INVALID(1002, "username must be at least 6 characters", HttpStatus.BAD_REQUEST),
-    PASSWORD_INVALID(1003, "password must be at least 6 characters", HttpStatus.BAD_REQUEST),
+    USERNAME_INVALID(1002, "username must be at least {min} characters", HttpStatus.BAD_REQUEST),
+    PASSWORD_INVALID(1003, "password must be at least {min} characters", HttpStatus.BAD_REQUEST),
     USER_EXISTED(1004, "user existed", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1005, "user not found", HttpStatus.NOT_FOUND),
-    DOB_INVALID(1006, "date of birth invalid", HttpStatus.BAD_REQUEST),
+    DOB_INVALID(1006, "age must be at least {min}", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(1010, "authenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1011, "unauthorized", HttpStatus.FORBIDDEN),
     OTHER_EXCEPTION(9999, "other exception", HttpStatus.INTERNAL_SERVER_ERROR),
