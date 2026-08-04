@@ -1,10 +1,9 @@
 package com.example.JavaSpringBoot.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -13,13 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
+public class Permission {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    String categoryName;
-    String img;
+    String name;
     String description;
 
 }

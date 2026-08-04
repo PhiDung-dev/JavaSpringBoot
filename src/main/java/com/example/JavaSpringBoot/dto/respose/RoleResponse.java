@@ -3,20 +3,17 @@ package com.example.JavaSpringBoot.dto.respose;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse {
+public class RoleResponse {
 
-    String id;
-    String productName;
+    String name;
     String description;
-    double price;
-    List<String> imgs;
-    String categoryId;
+    Set<PermissionResponse> permissions;
 
 }

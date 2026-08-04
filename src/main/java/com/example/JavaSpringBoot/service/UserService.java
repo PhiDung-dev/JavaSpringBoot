@@ -6,6 +6,7 @@ import com.example.JavaSpringBoot.enums.Role;
 import com.example.JavaSpringBoot.exception.AppException;
 import com.example.JavaSpringBoot.exception.ErrorCode;
 import com.example.JavaSpringBoot.mapper.UserMapper;
+import com.example.JavaSpringBoot.repository.RoleRepository;
 import com.example.JavaSpringBoot.repository.UserRepository;
 import com.example.JavaSpringBoot.dto.request.UserCreateRequest;
 import com.example.JavaSpringBoot.dto.request.UserUpdateRequest;
@@ -29,6 +30,7 @@ import java.util.List;
 public class UserService {
 
     UserRepository userRepository;
+    RoleRepository roleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -40,13 +42,12 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
-        user.setRoles(roles);
+//        user.setRoles(roles);
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> readUsers() {
-        log.info("in method read users");
         return userMapper.toUserResponseList(userRepository.findAll());
     }
 
@@ -59,6 +60,8 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
         return userMapper.toUserResponse(userRepository.save(user));
     }
 

@@ -5,6 +5,7 @@ import com.example.JavaSpringBoot.dto.request.UserUpdateRequest;
 import com.example.JavaSpringBoot.dto.respose.UserResponse;
 import com.example.JavaSpringBoot.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public interface UserMapper {
     User toUser(UserCreateRequest request);
     UserResponse toUserResponse(User user);
     List<UserResponse> toUserResponseList(List<User> users);
+    @Mapping(target = "roles", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 
 }

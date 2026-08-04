@@ -3,19 +3,14 @@ package com.example.JavaSpringBoot.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductCreateRequest {
+public class PermissionRequest {
 
-    String productName;
+    String name;
     String description;
-    double price;
-    List<String> imgs;
-    String categoryId;
 
 }
