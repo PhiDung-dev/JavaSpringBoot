@@ -1,6 +1,5 @@
 package com.example.JavaSpringBoot.configuration;
 
-import com.example.JavaSpringBoot.enums.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +25,6 @@ import javax.crypto.spec.SecretKeySpec;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINT = {"/api/users", "/auth/login", "/auth/introspect"};
-    private final String[] ADMIN_ENDPOINT = {"/api/users", "/api/products", "/api/categories"};
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -35,15 +33,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
-//                        .requestMatchers(HttpMethod.GET, ADMIN_ENDPOINT).hasRole(Role.ADMIN.name())
-//                        .requestMatchers(HttpMethod.DELETE, ADMIN_ENDPOINT).hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated()
         );
         httpSecurity.oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
-                httpSecurityOAuth2ResourceServerConfigurer.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder())
-                                    .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                )
+                httpSecurityOAuth2ResourceServerConfigurer
+                        .jwt(jwtConfigurer ->
+                                jwtConfigurer.decoder(jwtDecoder())
+                                            .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
         );
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
@@ -60,7 +58,6 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
-
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();

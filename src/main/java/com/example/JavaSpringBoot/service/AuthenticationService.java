@@ -45,7 +45,7 @@ public class AuthenticationService {
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if(!authenticated) {
-            throw new AppException(ErrorCode.AUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         var token = generateToken2(user);
         AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
@@ -62,7 +62,7 @@ public class AuthenticationService {
                 .issuer("service")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-                .claim("scope", builderScope(user.getRoles()))
+//                .claim("scope", builderScope(user.getRoles()))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
@@ -110,7 +110,7 @@ public class AuthenticationService {
                 .issuer("service")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-                .claim("scope", builderScope(user.getRoles()))
+//                .claim("scope", builderScope(user.getRoles()))
                 .build();
         SignedJWT signedJWT = new SignedJWT(jwsHeader, jwtClaimsSet);
         try {
