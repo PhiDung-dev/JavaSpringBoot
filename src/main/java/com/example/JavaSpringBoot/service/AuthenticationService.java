@@ -3,6 +3,7 @@ package com.example.JavaSpringBoot.service;
 import com.example.JavaSpringBoot.dto.request.AuthenticationRequest;
 import com.example.JavaSpringBoot.dto.request.IntrospectRequest;
 import com.example.JavaSpringBoot.dto.request.LogoutRequest;
+import com.example.JavaSpringBoot.dto.request.RefreshRequest;
 import com.example.JavaSpringBoot.dto.respose.AuthenticationResponse;
 import com.example.JavaSpringBoot.dto.respose.IntrospectResponse;
 import com.example.JavaSpringBoot.entity.InvalidatedToken;
@@ -77,6 +78,19 @@ public class AuthenticationService {
         String jti = signedJWT.getJWTClaimsSet().getJWTID();
         Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         invalidatedTokenRepository.save(new InvalidatedToken(jti, expiryTime));
+    }
+
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        SignedJWT signedJWT = verifyToken(request.getToken());
+        String jti = signedJWT.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        invalidatedTokenRepository.save(new InvalidatedToken(jti, expiryTime));
+        User user = userRepository.findByUsername(signedJWT.getJWTClaimsSet().getSubject()).orElseThrow(()->new AppException(ErrorCode.UNAUTHENTICATED));
+        String token = generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticate(true)
+                .build();
     }
 
     private String generateToken(User user){

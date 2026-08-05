@@ -3,6 +3,7 @@ package com.example.JavaSpringBoot.controller;
 import com.example.JavaSpringBoot.dto.request.AuthenticationRequest;
 import com.example.JavaSpringBoot.dto.request.IntrospectRequest;
 import com.example.JavaSpringBoot.dto.request.LogoutRequest;
+import com.example.JavaSpringBoot.dto.request.RefreshRequest;
 import com.example.JavaSpringBoot.dto.respose.ApiResponse;
 import com.example.JavaSpringBoot.dto.respose.AuthenticationResponse;
 import com.example.JavaSpringBoot.dto.respose.IntrospectResponse;
@@ -43,6 +44,13 @@ public class AuthenticationController {
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/refreshToken")
+    ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(authenticationService.refreshToken(request))
                 .build();
     }
 
