@@ -27,6 +27,7 @@ public class UserController {
 
     @PostMapping
     public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest request) {
+        log.info("Controller: Create user");
         ApiResponse<UserResponse> apiResponse = ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(request))
                 .build();
