@@ -6,6 +6,7 @@ import com.example.JavaSpringBoot.entity.User;
 import com.example.JavaSpringBoot.exception.AppException;
 import com.example.JavaSpringBoot.repository.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -13,11 +14,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -93,6 +96,36 @@ public class UserServiceTest {
 //        THEN
         Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1004);
         Assertions.assertThat(exception.getMessage()).isEqualTo("user existed");
+    }
+
+    @Test
+    @WithMockUser(username = "npdungx")
+    void getMyInfo_valid_success() {
+//        GIVEN
+        Mockito.when(userRepository.findByUsername(ArgumentMatchers.any())).thenReturn(Optional.ofNullable(user));
+
+//        WHEN
+        var response = userService.getMyInfo();
+
+//        THEN
+        Assertions.assertThat(response.getId()).isEqualTo("dung123");
+        Assertions.assertThat(response.getUsername()).isEqualTo("npdungx");
+        Assertions.assertThat(response.getFirstName()).isEqualTo("dung");
+        Assertions.assertThat(response.getLastName()).isEqualTo("nguyen phi");
+    }
+
+    @Test
+    @WithMockUser(username = "npdungx")
+    void getMyInfo_UserNotFound_fail() {
+//        GIVEN
+        Mockito.when(userRepository.findByUsername(ArgumentMatchers.any())).thenReturn(Optional.empty());
+
+//        WHEN
+        var exception = assertThrows(AppException.class, ()->userService.getMyInfo());
+
+//        THEN
+        Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1005);
+        Assertions.assertThat(exception.getMessage()).isEqualTo("user not found");
     }
 
 }
