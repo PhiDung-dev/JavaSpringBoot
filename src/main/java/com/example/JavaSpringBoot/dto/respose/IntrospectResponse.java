@@ -1,6 +1,5 @@
 package com.example.JavaSpringBoot.dto.respose;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,6 +10,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class IntrospectResponse {
 
-    boolean valid;
-
+  boolean valid;
 }

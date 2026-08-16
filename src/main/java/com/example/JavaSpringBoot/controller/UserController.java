@@ -1,20 +1,20 @@
 package com.example.JavaSpringBoot.controller;
 
+import java.util.List;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import com.example.JavaSpringBoot.dto.request.UserCreateRequest;
+import com.example.JavaSpringBoot.dto.request.UserUpdateRequest;
 import com.example.JavaSpringBoot.dto.respose.ApiResponse;
 import com.example.JavaSpringBoot.dto.respose.UserResponse;
 import com.example.JavaSpringBoot.entity.User;
 import com.example.JavaSpringBoot.service.UserService;
-import com.example.JavaSpringBoot.dto.request.UserCreateRequest;
-import com.example.JavaSpringBoot.dto.request.UserUpdateRequest;
+
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,66 +23,60 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
 
-    UserService userService;
+  UserService userService;
 
-    @PostMapping
-    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest request) {
-        log.info("Controller: Create user");
-        ApiResponse<UserResponse> apiResponse = ApiResponse.<UserResponse>builder()
-                .result(userService.createUser(request))
-                .build();
-        return apiResponse;
-    }
+  @PostMapping
+  public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest request) {
+    log.info("Controller: Create user");
+    ApiResponse<UserResponse> apiResponse =
+        ApiResponse.<UserResponse>builder().result(userService.createUser(request)).build();
+    return apiResponse;
+  }
 
-    @GetMapping
-    public ApiResponse<List<UserResponse>> readUsers() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-        ApiResponse<List<UserResponse>> apiResponse = ApiResponse.<List<UserResponse>>builder()
-                .result(userService.readUsers())
-                .build();
-        return apiResponse;
-    }
+  @GetMapping
+  public ApiResponse<List<UserResponse>> readUsers() {
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    log.info("username: {}", authentication.getName());
+    authentication
+        .getAuthorities()
+        .forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
+    ApiResponse<List<UserResponse>> apiResponse =
+        ApiResponse.<List<UserResponse>>builder().result(userService.readUsers()).build();
+    return apiResponse;
+  }
 
-    @GetMapping("/detail")
-    public ApiResponse<List<User>> readDetailUser(){
-        ApiResponse<List<User>> apiResponse = ApiResponse.<List<User>>builder()
-                .result(userService.readDetailUsers())
-                .build();
-        return apiResponse;
-    }
+  @GetMapping("/detail")
+  public ApiResponse<List<User>> readDetailUser() {
+    ApiResponse<List<User>> apiResponse =
+        ApiResponse.<List<User>>builder().result(userService.readDetailUsers()).build();
+    return apiResponse;
+  }
 
-    @GetMapping("/{userId}")
-    public ApiResponse<UserResponse> readUser(@PathVariable("userId") String userId) {
-        ApiResponse<UserResponse> apiResponse = ApiResponse.<UserResponse>builder()
-                .result(userService.readUser(userId))
-                .build();
-        return apiResponse;
-    }
+  @GetMapping("/{userId}")
+  public ApiResponse<UserResponse> readUser(@PathVariable("userId") String userId) {
+    ApiResponse<UserResponse> apiResponse =
+        ApiResponse.<UserResponse>builder().result(userService.readUser(userId)).build();
+    return apiResponse;
+  }
 
-    @PutMapping("/{userId}")
-    public ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
-        ApiResponse<UserResponse> apiResponse = ApiResponse.<UserResponse>builder()
-                .result(userService.updateUser(userId, request))
-                .build();
-        return apiResponse;
-    }
+  @PutMapping("/{userId}")
+  public ApiResponse<UserResponse> updateUser(
+      @PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
+    ApiResponse<UserResponse> apiResponse =
+        ApiResponse.<UserResponse>builder().result(userService.updateUser(userId, request)).build();
+    return apiResponse;
+  }
 
-    @DeleteMapping("/{userId}")
-    public ApiResponse<Void> deleteUser(@PathVariable String userId){
-        userService.deleteUser(userId);
-        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-                .message("user has been deleted")
-                .build();
-        return apiResponse;
-    }
+  @DeleteMapping("/{userId}")
+  public ApiResponse<Void> deleteUser(@PathVariable String userId) {
+    userService.deleteUser(userId);
+    ApiResponse<Void> apiResponse =
+        ApiResponse.<Void>builder().message("user has been deleted").build();
+    return apiResponse;
+  }
 
-    @GetMapping("/myInfo")
-    public ApiResponse<UserResponse> readMyInfo() {
-        return ApiResponse.<UserResponse>builder()
-                .result(userService.getMyInfo())
-                .build();
-    }
-
+  @GetMapping("/myInfo")
+  public ApiResponse<UserResponse> readMyInfo() {
+    return ApiResponse.<UserResponse>builder().result(userService.getMyInfo()).build();
+  }
 }

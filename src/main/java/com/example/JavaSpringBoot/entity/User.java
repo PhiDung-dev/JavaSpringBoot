@@ -1,10 +1,10 @@
 package com.example.JavaSpringBoot.entity;
 
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Entity
 @Getter
@@ -15,16 +15,15 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    String username;
-    String password;
-    String firstName;
-    String lastName;
-    String dateOfBirth;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  String id;
 
-    @ManyToMany
-    Set<Role> roles;
+  String username;
+  String password;
+  String firstName;
+  String lastName;
+  String dateOfBirth;
 
+  @ManyToMany Set<Role> roles;
 }

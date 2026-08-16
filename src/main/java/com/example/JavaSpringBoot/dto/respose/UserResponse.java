@@ -1,9 +1,9 @@
 package com.example.JavaSpringBoot.dto.respose;
 
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -12,12 +12,11 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
 
-    String id;
-    String username;
-    String password;
-    String firstName;
-    String lastName;
-    String dateOfBirth;
-    Set<RoleResponse> roles;
-
+  String id;
+  String username;
+  String password;
+  String firstName;
+  String lastName;
+  String dateOfBirth;
+  Set<RoleResponse> roles;
 }
