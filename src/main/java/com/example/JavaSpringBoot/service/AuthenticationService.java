@@ -54,6 +54,7 @@ public class AuthenticationService {
   protected long refreshTokenExpiration;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    log.info("signed key: "+ secretKey);
     var user =
         userRepository
             .findByUsername(request.getUsername())
