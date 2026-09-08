@@ -2,6 +2,7 @@ package com.example.JavaSpringBoot.entity;
 
 import java.util.Set;
 
+import com.example.JavaSpringBoot.converter.EncryptConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,7 +23,9 @@ public class User {
   @Column(unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
   String username;
   String password;
+  @Convert(converter = EncryptConverter.class)
   String firstName;
+  @Convert(converter = EncryptConverter.class)
   String lastName;
   String dateOfBirth;
 
