@@ -1,13 +1,18 @@
 package com.example.JavaSpringBoot.configuration;
 
 import java.util.HashSet;
+import java.util.Set;
+
+import com.example.JavaSpringBoot.entity.Role;
+import com.example.JavaSpringBoot.exception.AppException;
+import com.example.JavaSpringBoot.exception.ErrorCode;
+import com.example.JavaSpringBoot.repository.RoleRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.JavaSpringBoot.entity.User;
-import com.example.JavaSpringBoot.enums.Role;
 import com.example.JavaSpringBoot.repository.UserRepository;
 
 import lombok.AccessLevel;
@@ -22,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ApplicationInitConfig {
 
   PasswordEncoder passwordEncoder;
+  RoleRepository roleRepository;
 
   @Bean
   @ConditionalOnProperty(
@@ -30,13 +36,14 @@ public class ApplicationInitConfig {
       havingValue = "com.mysql.cj.jdbc.Driver")
   ApplicationRunner applicationRunner(UserRepository userRepository) {
     return args -> {
-      if (userRepository.findByUsername("admin").isEmpty()) {
-        HashSet<Role> roles = new HashSet<>();
-        //                roles.add(Role.ADMIN.name());
+      if (!userRepository.existsByUsername("admin")) {
+        Set<Role> roles = new HashSet<>();
+        Role role = roleRepository.findByName("ADMIN").orElseThrow(()->new AppException(ErrorCode.UNAUTHENTICATED));
+                        roles.add(role);
         User user =
             User.builder()
                 .username("admin")
-                //                        .roles(roles)
+                    .roles(roles)
                 .password(passwordEncoder.encode("admin"))
                 .build();
         userRepository.save(user);

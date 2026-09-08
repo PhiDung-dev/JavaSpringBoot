@@ -52,7 +52,7 @@ public class UserService {
     return userMapper.toUserResponse(user);
   }
 
-  @PreAuthorize("hasAuthority('READ_USERS')")
+  @PreAuthorize("hasAuthority('READ_USERS') or hasRole('ADMIN')")
   public List<UserResponse> readUsers() {
     return userMapper.toUserResponseList(userRepository.findAll());
   }
