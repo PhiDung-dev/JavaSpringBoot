@@ -23,7 +23,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
   private final String[] PUBLIC_ENDPOINT = {
-    "/api/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refreshToken"
+    "/api/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refreshToken", "/api/chatbot/**"
   };
 
   @Autowired CustomJwtDecoder customJwtDecoder;
