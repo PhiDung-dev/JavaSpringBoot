@@ -1,11 +1,14 @@
 package com.example.JavaSpringBoot.controller;
 
 import com.example.JavaSpringBoot.dto.request.ChatRequest;
+import com.example.JavaSpringBoot.dto.respose.FilmFomat;
 import com.example.JavaSpringBoot.service.ChatService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/chatbot")
@@ -19,7 +22,7 @@ public class ChatController {
     }
 
     @PostMapping("/chat")
-    public String chat(@RequestBody ChatRequest request) {
+    public List<FilmFomat> chat(@RequestBody ChatRequest request) {
         return chatService.chat(request);
     }
 

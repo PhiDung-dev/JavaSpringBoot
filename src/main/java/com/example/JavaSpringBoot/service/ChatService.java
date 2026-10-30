@@ -1,11 +1,16 @@
 package com.example.JavaSpringBoot.service;
 
 import com.example.JavaSpringBoot.dto.request.ChatRequest;
+import com.example.JavaSpringBoot.dto.respose.FilmFomat;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.content.Media;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
 
 
 @Service
@@ -17,11 +22,12 @@ public class ChatService {
         this.chatClient = chatClient.defaultSystem(systemPrompt).build();
     }
 
-    public String chat(ChatRequest chatRequest) {
+    public List<FilmFomat> chat(ChatRequest chatRequest) {
         return chatClient.prompt()
                 .user(chatRequest.getMessage())
                 .call()
-                .content();
+                .entity(new ParameterizedTypeReference<List<FilmFomat>>() {
+                });
     }
 
     public String chatWithImage(MultipartFile file, String message) {
