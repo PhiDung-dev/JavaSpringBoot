@@ -22,7 +22,7 @@ public class ChatController {
     }
 
     @PostMapping("/chat")
-    public List<FilmFomat> chat(@RequestBody ChatRequest request) {
+    public String chat(@RequestBody ChatRequest request) {
         return chatService.chat(request);
     }
 

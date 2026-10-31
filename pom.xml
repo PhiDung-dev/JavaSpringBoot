@@ -122,6 +122,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Chat Memory -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-chat-memory-repository-jdbc</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
